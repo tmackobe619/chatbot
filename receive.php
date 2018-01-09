@@ -8,7 +8,6 @@ $json_obj=json_decode($json_str); //轉成json格式
  $line_server_url = 'https://api.line.me/v2/bot/message/push';
  switch ($sender_txt) {
     		case "push":
-		 	$line_server_url = 'https://api.line.me/v2/bot/message/push';
         		$response = array (
 				"to" => $sender_userid,
 				"messages" => array (
@@ -40,6 +39,35 @@ $json_obj=json_decode($json_str); //轉成json格式
 						"type" => "image",
 						"originalContentUrl" => "https://www.w3schools.com/css/paris.jpg",
 						"previewImageUrl" => "https://www.nasa.gov/sites/default/themes/NASAPortal/images/feed.png"
+					)
+				)
+			);
+        		break;
+		 case "location":
+			$line_server_url = 'https://api.line.me/v2/bot/message/reply';
+        		$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+					array (
+						"type" => "location",
+						"title" => "my location",
+						"address" => "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
+            					"latitude" => 35.65910807942215,
+						"longitude" => 139.70372892916203
+					)
+				)
+			);
+        		break;
+		 
+		case "sticker":
+			$line_server_url = 'https://api.line.me/v2/bot/message/reply';
+        		$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+					array (
+						"type" => "sticker",
+						"packageId" => "1",
+						"stickerId" => "1"
 					)
 				)
 			);

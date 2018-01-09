@@ -5,9 +5,10 @@ $json_obj=json_decode($json_str); //轉成json格式
  $sender_userid = $json_obj->events[0]->source->userId;
  $sender_txt = $json_obj->events[0]->message->text;
  $sender_replyToken = $json_obj->events[0]->replyToken;
-
+ $line_server_url = 'https://api.line.me/v2/bot/message/push';
  switch ($sender_txt) {
     		case "push":
+		 	$line_server_url = 'https://api.line.me/v2/bot/message/push';
         		$response = array (
 				"to" => $sender_userid,
 				"messages" => array (
@@ -45,15 +46,6 @@ $json_obj=json_decode($json_str); //轉成json格式
         		break;
  }
 
- $response = array (
-				"replyToken" => $sender_replyToken,
-				"messages" => array (
-					array (
-						"type" => "text",
-						"text" => "Hello, YOU SAY ".$sender_txt
-					)
-				)
-		);
 
 $myfile = fopen("log.txt","w+") or die("Unable to open file");  //設定LOG印訊息
 fwrite($myfile,"\xEF\xBB\xBF".json_encode($response));//字串前加入"\xEF\xBB\xBF"轉成UTF-8格式

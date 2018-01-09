@@ -6,6 +6,10 @@ $json_obj=json_decode($json_str); //轉成json格式
  $sender_txt = $json_obj->events[0]->message->text;
  $sender_replyToken = $json_obj->events[0]->replyToken;
  $line_server_url = 'https://api.line.me/v2/bot/message/push';
+$myfile = fopen("log.txt","w+") or die("Unable to open file");  //設定LOG印訊息
+//fwrite($myfile,"\xEF\xBB\xBF".json_encode($response));//字串前加入"\xEF\xBB\xBF"轉成UTF-8格式
+fwrite($myfile,"\xEF\xBB\xBF".$json_str);//字串前加入"\xEF\xBB\xBF"轉成UTF-8格式
+fclose($myfile);
  switch ($sender_txt) {
     		case "push":
         		$response = array (
@@ -72,12 +76,41 @@ $json_obj=json_decode($json_str); //轉成json格式
 				)
 			);
         		break;
+		 
+		 case "button":
+			$line_server_url = 'https://api.line.me/v2/bot/message/reply';
+        		$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+					array (
+						"type" => "template",
+						"altText" => "this is a buttons template",
+						"template" => array (
+							"type" => "buttons",
+							"thumbnailImageUrl" => "https://www.w3schools.com/css/paris.jpg",
+							"title" => "Menu",
+							"text" => "Please select",
+							"actions" => array (
+								array (
+									"type" => "postback",
+									"label" => "Buy",
+									"data" => "action=buy&itemid=123"
+								),
+								array (
+									"type" => "postback",
+                   							"label" => "Add to cart",
+                    							"data" => "action=add&itemid=123"
+								)
+							)
+						)
+					)
+				)
+			);
+        		break;
  }
 
 
-$myfile = fopen("log.txt","w+") or die("Unable to open file");  //設定LOG印訊息
-fwrite($myfile,"\xEF\xBB\xBF".json_encode($response));//字串前加入"\xEF\xBB\xBF"轉成UTF-8格式
-fclose($myfile);
+
 
  //回傳給line server
  $header[] = "Content-Type: application/json";

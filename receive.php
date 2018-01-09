@@ -1,6 +1,18 @@
 <?php
 $json_str=file_get_contents('php://input');//接收REQUEST 的BODY
 $json_obj=json_decode($json_str); //轉成json格式
+ //產生回傳給line server的格式
+ $sender_userid = $json_obj->events[0]->source->userId;
+ $sender_txt = $json_obj->events[0]->message->text;
+ $response = array (
+				"to" => $sender_userid,
+				"messages" => array (
+					array (
+						"type" => "text",
+						"text" => "Hello, YOU SAY ".$sender_txt
+					)
+				)
+		);
 
 $myfile = fopen("log.txt","w+") or die("Unable to open file");  //設定LOG印訊息
 fwrite($myfile,"\xEF\xBB\xBF".$json_str);//字串前加入"\xEF\xBB\xBF"轉成UTF-8格式

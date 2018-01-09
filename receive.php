@@ -6,6 +6,5 @@ $myfile = fopen("log.txt","w+") or die("Unable to open file");  //設定LOG印�
 fwrite($myfile,"\xEF\xBB\xBF".$json_str);//字串前加入"\xEF\xBB\xBF"轉成UTF-8格式
 fclose($myfile);
  
-echo $json_obj
 
 ?>
